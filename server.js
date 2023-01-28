@@ -76,6 +76,10 @@ app.post('/login', (req, res) => {
         });
 });
 
+app.post('/logout', (req, res) => {
+    res.clearCookie('auth-token').send('Logged out');
+});
+
 app.listen(port, () => {
     console.log(`Auth service running on port ${port}`);
 });
