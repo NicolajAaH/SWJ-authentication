@@ -19,7 +19,9 @@ app.post('/register', (req, res) => {
         } else {
             const user = new User({
                 email: req.body.email,
-                password: hash
+                password: hash,
+                name: req.body.name,
+                role: req.body.role
             });
             user.save()
                 .then(result => {
