@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: authentication-service
-          image: nicolajh/authentication-service
+          image: nicolajh/swj-authentication
           ports:
             - containerPort: 3000
           env:
