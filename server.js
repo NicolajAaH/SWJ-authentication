@@ -3,14 +3,15 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const User = require('./models/user');
+var User = require('./User');
+require('dotenv').config();
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/authentication', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true });
 
 app.post('/register', (req, res) => {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -58,7 +59,8 @@ app.post('/login', (req, res) => {
                 if (result) {
                     const token = jwt.sign({
                         email: user[0].email,
-                        userId: user[0]._id
+                        userId: user[0]._id,
+                        role: user[0].role
                     }, 'secret', { expiresIn: '1h' });
                     return res.status(200).json({
                         message: 'Auth successful',
