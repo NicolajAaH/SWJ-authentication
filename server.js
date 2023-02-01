@@ -84,6 +84,21 @@ app.post('/logout', (req, res) => {
     res.clearCookie('auth-token').send('Logged out');
 });
 
+app.get('/users/emails', (req, res) => {
+    User.find()
+        .exec()
+        .then(users => {
+            const emails = users.map(user => user.email);
+            res.status(200).json(emails);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+})
+
 app.listen(port, () => {
     console.log(`Auth service running on port ${port}`);
 });
