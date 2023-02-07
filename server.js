@@ -102,3 +102,5 @@ app.get('/users/emails', (req, res) => {
 app.listen(port, () => {
     console.log(`Auth service running on port ${port}`);
 });
+
+module.exports = app
