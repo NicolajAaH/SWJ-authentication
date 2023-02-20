@@ -1,8 +1,8 @@
 name: authentication-service
 "on":
-    push:
-        branches:
-            - main
+    #push: commented out for now due to AKS downscaled
+    #    branches:
+    #        - main
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: job-boards-rg
