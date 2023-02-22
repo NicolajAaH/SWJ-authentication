@@ -99,6 +99,20 @@ app.get('/users/emails', (req, res) => {
         });
 })
 
+app.get('/user/:id', (req, res) => {
+    User.findById(req.params.id)
+        .exec()
+        .then(user => {
+            res.status(200).json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+})
+
 app.listen(port, () => {
     console.log(`Auth service running on port ${port}`);
 });
