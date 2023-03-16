@@ -22,7 +22,8 @@ app.post('/register', (req, res) => {
                 email: req.body.email,
                 password: hash,
                 name: req.body.name,
-                role: req.body.role
+                role: req.body.role,
+                phone: req.body.phone
             });
             user.save()
                 .then(result => {
