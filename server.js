@@ -62,7 +62,8 @@ app.post('/login', (req, res) => {
                         email: user[0].email,
                         userId: user[0]._id,
                         role: user[0].role,
-                        phone: user[0].phone
+                        phone: user[0].phone,
+                        name: user[0].name
                     }, 'secret', { expiresIn: '1h' });
                     return res.status(200).json({
                         message: 'Auth successful',
