@@ -121,8 +121,8 @@ app.put('/user/:id', (req, res) => {
     const user = {
         email: req.body.email,
         name: req.body.name,
-        role: req.body.role,
-        phone: req.body.phone
+        phone: req.body.phone,
+        updated_at: Date.now()
     };
     User.updateOne({ _id: req.params.id }, user).then(result => {
         res.status(200).json({ message: 'User updated' });
