@@ -61,7 +61,8 @@ app.post('/login', (req, res) => {
                     const token = jwt.sign({
                         email: user[0].email,
                         userId: user[0]._id,
-                        role: user[0].role
+                        role: user[0].role,
+                        phone: user[0].phone
                     }, 'secret', { expiresIn: '1h' });
                     return res.status(200).json({
                         message: 'Auth successful',
