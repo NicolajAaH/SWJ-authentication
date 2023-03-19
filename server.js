@@ -22,7 +22,8 @@ app.post('/register', (req, res) => {
                 email: req.body.email,
                 password: hash,
                 name: req.body.name,
-                role: req.body.role
+                role: req.body.role,
+                phone: req.body.phone
             });
             user.save()
                 .then(result => {
@@ -60,7 +61,9 @@ app.post('/login', (req, res) => {
                     const token = jwt.sign({
                         email: user[0].email,
                         userId: user[0]._id,
-                        role: user[0].role
+                        role: user[0].role,
+                        phone: user[0].phone,
+                        name: user[0].name
                     }, 'secret', { expiresIn: '1h' });
                     return res.status(200).json({
                         message: 'Auth successful',
@@ -98,6 +101,36 @@ app.get('/users/emails', (req, res) => {
             });
         });
 })
+
+app.get('/user/:id', (req, res) => {
+    User.findById(req.params.id)
+        .exec()
+        .then(user => {
+            res.status(200).json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+})
+
+app.put('/user/:id', (req, res) => {
+    //Update user
+    const user = {
+        email: req.body.email,
+        name: req.body.name,
+        phone: req.body.phone,
+        updated_at: Date.now()
+    };
+    User.updateOne({ _id: req.params.id }, user).then(result => {
+        res.status(200).json({ message: 'User updated' });
+    }).catch(err => {
+        res.status(500).json({ error: err });
+    }
+    );
+});
 
 app.listen(port, () => {
     console.log(`Auth service running on port ${port}`);
