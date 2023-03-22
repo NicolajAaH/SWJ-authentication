@@ -100,7 +100,7 @@ app.get('/users/emails', (req, res) => {
                 error: err
             });
         });
-})
+});
 
 app.get('/user/:id', (req, res) => {
     User.findById(req.params.id)
@@ -114,7 +114,7 @@ app.get('/user/:id', (req, res) => {
                 error: err
             });
         });
-})
+});
 
 app.put('/user/:id', (req, res) => {
     //Update user
@@ -126,6 +126,15 @@ app.put('/user/:id', (req, res) => {
     };
     User.updateOne({ _id: req.params.id }, user).then(result => {
         res.status(200).json({ message: 'User updated' });
+    }).catch(err => {
+        res.status(500).json({ error: err });
+    }
+    );
+});
+
+app.delete('/user/:id', (req, res) => {
+    User.deleteOne({ _id: req.params.id }).then(result => {
+        res.status(200).json({ message: 'User deleted' });
     }).catch(err => {
         res.status(500).json({ error: err });
     }
