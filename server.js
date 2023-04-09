@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true });
 
 app.post('/register', (req, res) => {
+    console.log("Registering user: " + req.body.email);
     bcrypt.hash(req.body.password, 10, (err, hash) => {
         if (err) {
             res.status(500).json({ error: err });
@@ -43,6 +44,7 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
+    console.log("Logging in user: " + req.body.email);
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
@@ -84,10 +86,12 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/logout', (req, res) => {
+    console.log("Logging out user: " + req.body.email);
     res.clearCookie('auth-token').send('Logged out');
 });
 
 app.get('/users/emails', (req, res) => {
+    console.log("Getting all users emails");
     User.find()
         .exec()
         .then(users => {
@@ -103,6 +107,7 @@ app.get('/users/emails', (req, res) => {
 });
 
 app.get('/user/:id', (req, res) => {
+    console.log("Getting user: " + req.params.id);
     User.findById(req.params.id)
         .exec()
         .then(user => {
@@ -117,6 +122,7 @@ app.get('/user/:id', (req, res) => {
 });
 
 app.put('/user/:id', (req, res) => {
+    console.log("Updating user: " + req.params.id);
     //Update user
     const user = {
         email: req.body.email,
@@ -133,6 +139,7 @@ app.put('/user/:id', (req, res) => {
 });
 
 app.delete('/user/:id', (req, res) => {
+    console.log("Deleting user: " + req.params.id);
     User.deleteOne({ _id: req.params.id }).then(result => {
         res.status(200).json({ message: 'User deleted' });
     }).catch(err => {
