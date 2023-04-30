@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: authentication-service-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: authentication-service
@@ -20,6 +20,13 @@ spec:
           env:
             - name: MONGOURL
               value: mongodb://database-authentication-service:27017/authentication
+          resources:
+            limits:  
+              cpu: "500m"
+              memory: "500Mi"
+            requests:  
+              cpu: "500m"
+              memory: "500Mi"
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -51,6 +58,13 @@ spec:
           volumeMounts:
             - name: mongo-persistent-storage
               mountPath: /data/db
+          resources:
+            limits:  
+              cpu: "500m"
+              memory: "500Mi"
+            requests:  
+              cpu: "500m"
+              memory: "500Mi"
   volumeClaimTemplates:
   - metadata:
       name: mongo-persistent-storage
