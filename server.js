@@ -10,6 +10,8 @@ require('dotenv').config();
 const app = express();
 const port = 3000;
 
+const secret = Buffer.from(process.env.SECRET, 'base64').toString('ascii'); //It is encoded in base64 as environment variable
+
 app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true });
@@ -67,7 +69,7 @@ app.post('/login', (req, res) => {
                         role: user[0].role,
                         phone: user[0].phone,
                         name: user[0].name
-                    }, Buffer.from(process.env.SECRET, 'base64').toString('ascii'), { expiresIn: '1h' });
+                    }, secret, { expiresIn: '1h' });
                     return res.status(200).json({
                         message: 'Auth successful',
                         token: token
