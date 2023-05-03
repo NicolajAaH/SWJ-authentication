@@ -20,6 +20,11 @@ spec:
           env:
             - name: MONGOURL
               value: mongodb://database-authentication-service:27017/authentication
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwtsecret
+                  key: secret
           resources:
             limits:  
               cpu: "500m"
