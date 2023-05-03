@@ -46,7 +46,6 @@ app.post('/register', (req, res) => {
 
 app.post('/login', (req, res) => {
     console.log("Logging in user: " + req.body.email);
-    console.log(process.env.SECRET);
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
@@ -68,7 +67,7 @@ app.post('/login', (req, res) => {
                         role: user[0].role,
                         phone: user[0].phone,
                         name: user[0].name
-                    }, process.env.SECRET, { expiresIn: '1h' });
+                    }, Buffer.from(process.env.SECRET, 'base64').toString('ascii'), { expiresIn: '1h' });
                     return res.status(200).json({
                         message: 'Auth successful',
                         token: token
