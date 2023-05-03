@@ -46,6 +46,7 @@ app.post('/register', (req, res) => {
 
 app.post('/login', (req, res) => {
     console.log("Logging in user: " + req.body.email);
+    console.log(process.env.SECRET);
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
