@@ -17,6 +17,8 @@ sinon.stub(mongoose.Query.prototype, 'exec').resolves([{
   _id: '5d9f1140f10a81216cfd4408'
 }]);
 
+process.env.SECRET = 'c2VjcmV0X2VuY29kZWRfaW5fYmFzZTY0X3JhbmRvbV9sZXR0ZXJz' //Mock secret
+
 describe('User authentication', () => {
   describe('/register', () => {
     it('Should register a new user', done => {
