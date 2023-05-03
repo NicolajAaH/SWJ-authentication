@@ -1,5 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+process.env.SECRET = 'c2VjcmV0X2VuY29kZWRfaW5fYmFzZTY0X3JhbmRvbV9sZXR0ZXJz' //It is a test secret
 const app = require('../server.js');
 const User = require('../User');
 const mongoose = require('mongoose');
@@ -16,8 +17,6 @@ sinon.stub(mongoose.Query.prototype, 'exec').resolves([{
   role: 'COMPANY',
   _id: '5d9f1140f10a81216cfd4408'
 }]);
-
-process.env.SECRET = 'c2VjcmV0X2VuY29kZWRfaW5fYmFzZTY0X3JhbmRvbV9sZXR0ZXJz' //Mock secret
 
 describe('User authentication', () => {
   describe('/register', () => {
@@ -87,6 +86,7 @@ describe('User authentication', () => {
       chai.request(app)
       .post('/logout')
       .send({
+        email: 'test@example.com'
       }).end((err, res) => {
         expect(err).to.be.null;
         expect(res).to.have.status(200);
