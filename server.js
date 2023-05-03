@@ -9,7 +9,6 @@ require('dotenv').config();
 
 const app = express();
 const port = 3000;
-const secret = crypto.randomBytes(32).toString('hex');
 
 app.use(bodyParser.json());
 
@@ -68,7 +67,7 @@ app.post('/login', (req, res) => {
                         role: user[0].role,
                         phone: user[0].phone,
                         name: user[0].name
-                    }, secret, { expiresIn: '1h' });
+                    }, process.env.SECRET, { expiresIn: '1h' });
                     return res.status(200).json({
                         message: 'Auth successful',
                         token: token
