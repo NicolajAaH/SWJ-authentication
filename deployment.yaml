@@ -19,7 +19,10 @@ spec:
             - containerPort: 3000
           env:
             - name: MONGOURL
-              value: mongodb://database-authentication-service:27017/authentication
+              valueFrom:
+                secretKeyRef:
+                  name: databasesecrets
+                  key: connection-string-authentication-service
             - name: SECRET
               valueFrom:
                 secretKeyRef:
@@ -32,67 +35,6 @@ spec:
             requests:  
               cpu: "500m"
               memory: "500Mi"
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: database-authentication-service
-spec:
-  serviceName: database-authentication-service
-  replicas: 1
-  selector:
-    matchLabels:
-      role: database-authentication-service
-  template:
-    metadata:
-      labels:
-        role: database-authentication-service
-    spec:
-      terminationGracePeriodSeconds: 10
-      containers:
-        - name: mongo
-          image: mongo
-          command:
-            - mongod
-            - "--bind_ip_all"
-          env:
-            - name: MONGO_INIT_DB_DATABASE
-              value: authentication
-          ports:
-            - containerPort: 27017
-          volumeMounts:
-            - name: mongo-persistent-storage
-              mountPath: /data/db
-          resources:
-            limits:  
-              cpu: "500m"
-              memory: "500Mi"
-            requests:  
-              cpu: "500m"
-              memory: "500Mi"
-  volumeClaimTemplates:
-  - metadata:
-      name: mongo-persistent-storage
-      annotations:
-        volume.beta.kubernetes.io/storage-class: "standard"
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 250Mi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: database-authentication-service
-spec:
-  ports:
-  - name: http
-    port: 27017
-    targetPort: 27017
-  selector:
-    role: database-authentication-service
-  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
