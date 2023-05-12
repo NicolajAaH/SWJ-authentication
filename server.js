@@ -16,7 +16,9 @@ app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true });
 
-//Register an user - returns 201 if created
+/**
+ * @api {post} /register - Register an user - returns 201 if created
+ */
 app.post('/register', (req, res) => {
     console.log("Registering user: " + req.body.email);
     bcrypt.hash(req.body.password, 10, (err, hash) => { //Hash the password for security
@@ -47,7 +49,9 @@ app.post('/register', (req, res) => {
     });
 });
 
-//Login an user - returns 200 if successful with a JWT
+/**
+ * @api {post} /login - Login an user - returns 200 if successful with a JWT
+ */
 app.post('/login', (req, res) => {
     console.log("Logging in user: " + req.body.email);
     User.find({ email: req.body.email })
@@ -95,7 +99,9 @@ app.post('/logout', (req, res) => {
     res.clearCookie('auth-token').send('Logged out');
 });
 
-//Get all emails for users 
+/**
+ * @api {get} /users - Get all emails for users 
+ */
 app.get('/users/emails', (req, res) => {
     console.log("Getting all users emails");
     User.find()
@@ -112,7 +118,9 @@ app.get('/users/emails', (req, res) => {
         });
 });
 
-//Get user by id
+/**
+ * @api {get} /users - Get user by id
+ */
 app.get('/user/:id', (req, res) => {
     console.log("Getting user: " + req.params.id);
     User.findById(req.params.id)
@@ -128,7 +136,9 @@ app.get('/user/:id', (req, res) => {
         });
 });
 
-//Update a user by id
+/**
+ * @api {put} /users - Update a user by id
+ */
 app.put('/user/:id', (req, res) => {
     console.log("Updating user: " + req.params.id);
     //Update user
@@ -146,7 +156,9 @@ app.put('/user/:id', (req, res) => {
     );
 });
 
-//Delete a user by id
+/**
+ * @api {delete} /users - Delete a user by id
+ */
 app.delete('/user/:id', (req, res) => {
     console.log("Deleting user: " + req.params.id);
     User.deleteOne({ _id: req.params.id }).then(result => {
