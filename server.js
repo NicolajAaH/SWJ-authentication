@@ -16,9 +16,12 @@ app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true });
 
+/**
+ * @api {post} /register - Register an user - returns 201 if created
+ */
 app.post('/register', (req, res) => {
     console.log("Registering user: " + req.body.email);
-    bcrypt.hash(req.body.password, 10, (err, hash) => {
+    bcrypt.hash(req.body.password, 10, (err, hash) => { //Hash the password for security
         if (err) {
             res.status(500).json({ error: err });
         } else {
@@ -46,19 +49,22 @@ app.post('/register', (req, res) => {
     });
 });
 
+/**
+ * @api {post} /login - Login an user - returns 200 if successful with a JWT
+ */
 app.post('/login', (req, res) => {
     console.log("Logging in user: " + req.body.email);
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
-            if (user.length < 1) {
+            if (user.length < 1) { //If no user found
                 return res.status(401).json({
                     message: 'Auth failed'
                 });
             }
-            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+            bcrypt.compare(req.body.password, user[0].password, (err, result) => { //Compare hashed password
                 if (err) {
-                    return res.status(401).json({
+                    return res.status(401).json({ //Not equal
                         message: 'Auth failed'
                     });
                 }
@@ -69,7 +75,7 @@ app.post('/login', (req, res) => {
                         role: user[0].role,
                         phone: user[0].phone,
                         name: user[0].name
-                    }, secret, { expiresIn: '1h' });
+                    }, secret, { expiresIn: '1h' }); //Create JWT with expiry of 1 hour
                     return res.status(200).json({
                         message: 'Auth successful',
                         token: token
@@ -93,6 +99,9 @@ app.post('/logout', (req, res) => {
     res.clearCookie('auth-token').send('Logged out');
 });
 
+/**
+ * @api {get} /users - Get all emails for users 
+ */
 app.get('/users/emails', (req, res) => {
     console.log("Getting all users emails");
     User.find()
@@ -109,6 +118,9 @@ app.get('/users/emails', (req, res) => {
         });
 });
 
+/**
+ * @api {get} /users - Get user by id
+ */
 app.get('/user/:id', (req, res) => {
     console.log("Getting user: " + req.params.id);
     User.findById(req.params.id)
@@ -124,6 +136,9 @@ app.get('/user/:id', (req, res) => {
         });
 });
 
+/**
+ * @api {put} /users - Update a user by id
+ */
 app.put('/user/:id', (req, res) => {
     console.log("Updating user: " + req.params.id);
     //Update user
@@ -141,6 +156,9 @@ app.put('/user/:id', (req, res) => {
     );
 });
 
+/**
+ * @api {delete} /users - Delete a user by id
+ */
 app.delete('/user/:id', (req, res) => {
     console.log("Deleting user: " + req.params.id);
     User.deleteOne({ _id: req.params.id }).then(result => {

@@ -4,7 +4,7 @@
   "description": "Authentication service for SoftwareJobs",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --exit"
+    "test": "nyc mocha --exit"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "jsonwebtoken": "^9.0.0",
     "mocha": "^10.2.0",
     "mongoose": "^6.9.0",
+    "nyc": "^15.1.0",
     "sinon": "^15.0.1"
   }
 }
