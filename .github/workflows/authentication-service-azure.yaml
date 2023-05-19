@@ -12,7 +12,7 @@ env:
     DEPLOYMENT_MANIFEST_PATH: ./deployment.yaml
 jobs:
     buildTestAndUploadImage:
-        uses: ./pr-workflow.yml
+        uses: ./.github/workflows/pr-workflow.yml
 
     deploy:
         permissions:
