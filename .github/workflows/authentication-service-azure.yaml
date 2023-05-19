@@ -1,33 +1,19 @@
 name: authentication-service-azure
-"on":
+
+on:
     push:
         branches:
             - main
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: job-boards-rg
-    AZURE_CONTAINER_REGISTRY: acrworkflow1683286159198
     CLUSTER_NAME: job-boards-aks
     CLUSTER_RESOURCE_GROUP: job-boards-rg
-    CONTAINER_NAME: image-workflow-1683286302895
-    DEPLOYMENT_MANIFEST_PATH: |
-        ./deployment.yaml
+    DEPLOYMENT_MANIFEST_PATH: ./deployment.yaml
 jobs:
-    buildImage:
-        permissions:
-            contents: read
-            id-token: write
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: azure/login@v1.4.3
-              name: Azure login
-              with:
-                client-id: ${{ secrets.AZURE_CLIENT_ID }}
-                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            - name: Build and push image to ACR
-              run: az acr build --image ${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ./Dockerfile ./
+    buildTestAndUploadImage:
+        uses: ./pr-workflow.yml
+
     deploy:
         permissions:
             actions: read
@@ -35,7 +21,7 @@ jobs:
             id-token: write
         runs-on: ubuntu-latest
         needs:
-            - buildImage
+            - buildTestAndUploadImage
         steps:
             - uses: actions/checkout@v3
             - uses: azure/login@v1.4.3
@@ -59,6 +45,5 @@ jobs:
               name: Deploys application
               with:
                 action: deploy
-                images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
                 manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
                 namespace: default
