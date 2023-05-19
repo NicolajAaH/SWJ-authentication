@@ -13,6 +13,9 @@ env:
 jobs:
     buildTestAndUploadImage:
         uses: ./.github/workflows/pr-workflow.yml
+        secrets:
+            DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+            DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
 
     deploy:
         permissions:
