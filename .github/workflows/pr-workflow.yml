@@ -1,12 +1,10 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+  workflow_call: #Reusable for when the PR is merged
 
 env:
   DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
