@@ -5,6 +5,11 @@ on:
     branches:
       - main
   workflow_call: #Reusable for when the PR is merged
+    secrets:
+      DOCKER_HUB_PASSWORD:
+        required: true
+      DOCKER_HUB_USERNAME:
+        required: true
 
 env:
   DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
